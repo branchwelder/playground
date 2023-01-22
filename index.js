@@ -6,6 +6,7 @@ sketchWindow.geval = sketchWindow.eval;
 
 const defaultSketch = `function setup() {
   createCanvas(windowWidth, windowHeight);
+  ellipseMode(CORNER);
 }
 
 function makeArr(startValue, stopValue, cardinality) {
@@ -19,16 +20,16 @@ function makeArr(startValue, stopValue, cardinality) {
 
 function draw() {
   clear()
-  let xPts = makeArr(0, windowWidth, 30)
-  let yPts = makeArr(0, windowHeight, 30)
+  let yPts = makeArr(0, windowHeight, 50)
 
-  for (const pt of xPts) {
-    line(pt, 0, mouseX, mouseY);
-    line(pt, windowHeight, mouseX, mouseY);
-  }
+	let rat = mouseY / windowHeight;
   for (const pt of yPts) {
-    line(0, pt, mouseX, mouseY);
-    line(windowWidth, pt, mouseX, mouseY);
+
+    circle(0, pt, (1-rat) * windowHeight-pt);
+
+    let leftWidth = (1-rat) * (windowHeight-pt);
+
+    circle(windowWidth-leftWidth, pt, rat*leftWidth);
   }
 }
 
