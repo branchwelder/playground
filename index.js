@@ -4,32 +4,35 @@ const outputRoot = document.getElementById("output");
 const sketchWindow = sketchRoot.contentWindow;
 sketchWindow.geval = sketchWindow.eval;
 
-const defaultSketch = `function setup() {
+const defaultSketch = `
+let num, step, heightStep, widthStep;
+
+function setup() {
   createCanvas(windowWidth, windowHeight);
-  ellipseMode(CORNER);
+  num = 40;
+  colorStep = 360 / num;
+  heightStep = windowHeight / num ;
+  widthStep = windowWidth / num ;
+  maxWidth = 1000;
 }
 
-function makeArr(startValue, stopValue, cardinality) {
-  var arr = [];
-  var step = (stopValue - startValue) / (cardinality - 1);
-  for (var i = 0; i < cardinality; i++) {
-    arr.push(startValue + (step * i));
-  }
-  return arr;
-}
 
 function draw() {
   clear()
-  let yPts = makeArr(0, windowHeight, 50)
+  background(0,30,40);
 
-	let rat = mouseY / windowHeight;
-  for (const pt of yPts) {
+  for (let pt = 0; pt < num; pt++) {
 
-    circle(0, pt, (1-rat) * windowHeight-pt);
+    let xCoord = pt * widthStep
+    let yCoord = pt * heightStep;
 
-    let leftWidth = (1-rat) * (windowHeight-pt);
+    let width = abs(mouseY - yCoord);
 
-    circle(windowWidth-leftWidth, pt, rat*leftWidth);
+    redness = 255 * (1 - (width/windowHeight));
+    fill(redness,42,56);
+
+    circle(windowWidth-xCoord, yCoord, width);
+    circle(xCoord, yCoord, width);
   }
 }
 
@@ -39,7 +42,7 @@ function windowResized() {
 
 let state = {
   output: "",
-  sketch: defaultSketch,
+  sketch: "",
   resizing: false,
   initialized: false,
 };
@@ -87,6 +90,8 @@ window.addEventListener("message", function (e) {
 function evalSketch() {
   if (state.resizing) return;
   const code = sketchEditor.getValue();
+  localStorage.setItem("sketch", code);
+
   state.output = "";
   try {
     sketchWindow.geval(
@@ -118,6 +123,8 @@ function evalSketch() {
 
 function init() {
   sketchWindow.geval(`new p5();`);
+  state.sketch = localStorage.getItem("sketch") ?? defaultSketch;
+  sketchEditor.getDoc().setValue(state.sketch);
   evalSketch();
 }
 
