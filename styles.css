@@ -40,13 +40,28 @@ input[type="file"] {
   display: flex;
 }
 
+html,
+body {
+  width: 100vw;
+  width: calc(var(--vw, 1vw) * 100);
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  margin: 0px;
+  display: flex;
+  font-family: monospace;
+  touch-action: none;
+}
+
 #workspace {
   display: flex;
-  height: 100vh;
-  max-height: 100vh;
-  width: 100vw;
-  max-width: 100vw;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
+}
+
+.mobile #workspace {
+  flex-direction: column-reverse;
+  font-size: 2rem;
 }
 
 #sidebar {
@@ -54,6 +69,11 @@ input[type="file"] {
   flex-direction: column;
   background-color: var(--nord0);
   width: 600px;
+}
+
+.mobile #sidebar {
+  height: calc(var(--vh, 1vh) * 50);
+  width: 100%;
 }
 
 #sketch {
@@ -146,6 +166,10 @@ input[type="file"] {
   color: var(--nord0);
   font-weight: 600;
   font-size: 1rem;
+}
+
+.mobile .bar > span {
+  font-size: 2rem;
 }
 
 .bar-buttons {

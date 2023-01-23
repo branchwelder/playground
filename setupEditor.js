@@ -1,44 +1,35 @@
-const defaultSketch = `let theta;
-let length;
+const defaultSketch = `let num, step, heightStep, widthStep;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  num = 40;
+  colorStep = 360 / num;
+  heightStep = windowHeight / num;
+  widthStep = windowWidth / num;
+  maxWidth = 1000;
 }
 
 function draw() {
-  background(0);
-  frameRate(30);
-  stroke(255);
-  let a = (mouseX / width) * 90;
-  theta = radians(a);
-  translate(width/2,height);
+  clear();
+  background(0, 30, 40);
 
-  length = width/3;
-  line(0,0,0,-length);
-  translate(0,-length);
-  branch(length);
+  for (let pt = 0; pt < num; pt++) {
+    let xCoord = pt * widthStep;
+    let yCoord = pt * heightStep;
 
-}
+    let width = abs(mouseY - yCoord);
 
-function branch(h) {
-  h *= 0.66;
+    redness = 255 * (1 - width / windowHeight);
+    fill(redness, 42, 56);
 
-  if (h > 2) {
-    push();
-    rotate(theta);
-    line(0, 0, 0, -h);
-    translate(0, -h);
-    branch(h);
-    pop();
-    push();
-    rotate(-theta);
-    line(0, 0, 0, -h);
-    translate(0, -h);
-    branch(h);
-    pop();
+    circle(windowWidth - xCoord, yCoord, width);
+    circle(xCoord, yCoord, width);
   }
 }
-`;
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}`;
 
 const completions = [
   { label: "circle", type: "keyword" },
