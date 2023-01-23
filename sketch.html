@@ -13,6 +13,8 @@
     body {
       overflow: hidden;
       margin: 0;
+      height: 100vh;
+      width: 100vh;
     }
   </style>
   <body>
@@ -21,7 +23,7 @@
       addEventListener(
         "DOMContentLoaded",
         (e) => {
-          window.parent.postMessage({ status: "ready" });
+          window.parent.postMessage({ type: "ready", body: "" });
         },
         { once: true }
       );
