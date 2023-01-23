@@ -13,7 +13,7 @@ const globalState = {
   sketchWindow: null,
   evalSketch: evalSketch,
   editorTimeout: 500,
-  useLocalStorage: true,
+  useLocalStorage: false,
   outputBuffer: 100,
 };
 
