@@ -19,13 +19,13 @@ export function setupMessages(state) {
   }
 
   function messageReady(messageBody) {
-    console.debug("Sketch frame is ready");
     if (state.initialized) return;
     if (
       document.readyState === "complete" ||
       document.readyState === "loaded"
     ) {
       state.initialized = true;
+      console.debug("Sketch frame is ready");
       initSketch();
     } else {
       window.addEventListener("DOMContentLoaded", init, { once: true });

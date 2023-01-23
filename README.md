@@ -15,6 +15,7 @@ tool such as VSCode's Live Server.
   - [x] editor full height
   - [x] eval p5 sketch on type
   - [x] intercept p5 friendly errors
+  - [ ] p5 preload
 - **interface**
   - [x] refactor view into templates
   - [x] resize panels

@@ -9,7 +9,6 @@ const globalState = {
   sketch: null,
   resizing: false,
   initialized: false,
-  examples: ["cones"],
   editor: null,
   sketchWindow: null,
   evalSketch: evalSketch,
