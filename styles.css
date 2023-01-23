@@ -27,10 +27,6 @@
   --color: var(--green);
 }
 
-/* * {
-  box-sizing: border-box;
-} */
-
 html,
 body {
   width: 100vw;
@@ -43,6 +39,7 @@ body {
   touch-action: none;
   overscroll-behavior: none;
   overflow: hidden;
+  background-color: var(--nord0);
 }
 
 input[type="file"] {
