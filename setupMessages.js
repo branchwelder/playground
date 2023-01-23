@@ -18,7 +18,7 @@ export function setupMessages(state) {
     console.debug(messageBody);
   }
 
-  function messageReady(messageBody) {
+  function messageReady(_) {
     if (state.initialized) return;
     if (
       document.readyState === "complete" ||
@@ -34,7 +34,7 @@ export function setupMessages(state) {
 
   function messageError(messageBody) {
     console.debug(messageBody);
-    state.output = [{ type: "error", body: messageBody }];
+    state.setOutput(false, [{ type: "error", body: messageBody }]);
   }
 
   function messageOutput(messageBody) {
@@ -45,17 +45,17 @@ export function setupMessages(state) {
     messageBody = messageBody.toString();
 
     if (messageBody.includes("p5.js says:")) {
-      state.output = [{ type: "p5", body: messageBody }];
+      state.setOutput(false, [{ type: "p5", body: messageBody }]);
       return;
     }
     if (!state.output.length) {
-      state.output = [{ type: "log", body: messageBody, count: 1 }];
+      state.setOutput(false, [{ type: "log", body: messageBody, count: 1 }]);
       return;
     }
     if (messageBody === state.output.at(-1).body) {
       state.output.at(-1).count += 1;
     } else {
-      state.output.push({ type: "log", body: messageBody, count: 1 });
+      state.setOutput(true, { type: "log", body: messageBody, count: 1 });
     }
   }
 

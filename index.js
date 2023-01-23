@@ -11,12 +11,13 @@ const globalState = {
   initialized: false,
   editor: null,
   sketchWindow: null,
-  evalSketch: evalSketch,
   editorTimeout: 500,
   useLocalStorage: false,
   outputBuffer: 100,
   mobile: false,
   hideSidebar: false,
+  evalSketch: evalSketch,
+  setOutput: setOutput,
 };
 
 const examples = [
@@ -34,7 +35,7 @@ function evalSketch() {
   if (globalState.resizing) return;
   console.debug("Evaluating sketch");
   // TODO: should the ouput get reset here? It would be nice to have it persistent.
-  globalState.output = [];
+  setOutput(false, []);
 
   try {
     globalState.sketchWindow.geval(
@@ -66,13 +67,15 @@ function evalSketch() {
     );
   } catch (e) {
     console.debug(e);
-    globalState.output = [{ type: "error", body: e.toString() }];
+    setOutput(false, [{ type: "error", body: e.toString() }]);
+    //globalState.output = [{ type: "error", body: e.toString() }];
   }
 }
 
-function renderOutput(state) {
+function renderOutput() {
+  console.debug("output rendering");
   let out = [];
-  for (const line of state.output) {
+  for (const line of globalState.output) {
     if (line.type === "log") {
       out.push(
         html`<div class="output-line">
@@ -90,7 +93,19 @@ function renderOutput(state) {
   return out;
 }
 
+function setOutput(append, line) {
+  if (append) {
+    globalState.output.push(line);
+  } else {
+    globalState.output = line;
+  }
+
+  render(renderOutput(), document.getElementById("output"));
+}
+
 function view(state) {
+  console.debug("view rendering");
+
   let pointerEvents = state.resizing ? "disablePointerEvents" : "";
   return html`<div id="sidebar-container">
       <div id="sidebar">
@@ -124,7 +139,7 @@ function view(state) {
           data-resize="output"
           data-resizedir="ns"
           class="resize-bar ns"></div>
-        <div id="output" class=${pointerEvents}>${renderOutput(state)}</div>
+        <div id="output" class=${pointerEvents}>${renderOutput()}</div>
       </div>
       <div
         data-resize="sidebar"
@@ -136,16 +151,6 @@ function view(state) {
       id="sketch"
       class=${pointerEvents}
       src="sketch.html"></iframe>`;
-}
-
-function renderLoop() {
-  let vh = window.innerHeight * 0.01;
-  let vw = window.innerWidth * 0.01;
-  document.documentElement.style.setProperty("--vh", `${vh}px`);
-  document.documentElement.style.setProperty("--vw", `${vw}px`);
-
-  render(view(globalState), document.body);
-  window.requestAnimationFrame(renderLoop);
 }
 
 function isMobile() {
@@ -165,6 +170,14 @@ function isMobile() {
   return check;
 }
 
+// TODO resize observer should re-render the view when window is resized
+function windowResize() {
+  let vh = window.innerHeight * 0.01;
+  let vw = window.innerWidth * 0.01;
+  document.documentElement.style.setProperty("--vh", `${vh}px`);
+  document.documentElement.style.setProperty("--vw", `${vw}px`);
+}
+
 function setup() {
   render(view(globalState), document.body);
 
@@ -182,8 +195,6 @@ function setup() {
   setupEditor(globalState, document.getElementById("editor"));
   setupResize(globalState, document.getElementById("sidebar-container"));
   setupMessages(globalState);
-
-  window.requestAnimationFrame(renderLoop);
 }
 
 window.onload = setup;

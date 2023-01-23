@@ -85,9 +85,12 @@ export async function setupEditor(state, editorRoot) {
 
   function handleChange(e) {
     if (e.doc.history.lastOrigin === "setValue") {
+      // Don't want to use a timeout if the change came from setValue
       doChanges();
       return;
     }
+    // To prevent constant sketch eval when typing, restart a timeout whenever
+    // there are changes
     if (timeoutID) clearTimeout(timeoutID);
     timeoutID = setTimeout(doChanges, state.editorTimeout);
   }
