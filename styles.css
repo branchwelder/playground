@@ -50,6 +50,7 @@ body {
   display: flex;
   font-family: monospace;
   touch-action: none;
+  overscroll-behavior: none;
 }
 
 #workspace {
