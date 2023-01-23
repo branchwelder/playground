@@ -86,7 +86,7 @@ function view(state) {
           </div>
         </div>
         <div id="editor" class=${pointerEvents}></div>
-        <div class="purple bar">
+        <div id="output-header" class="purple bar">
           <span class="bar-title">output</span>
         </div>
         <div

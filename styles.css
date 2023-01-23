@@ -86,6 +86,10 @@ body {
   background-color: var(--nord0);
 }
 
+.mobile .resize-bar {
+  display: none;
+}
+
 .resize-bar:hover {
   background-color: var(--blue);
 }
@@ -112,6 +116,14 @@ body {
   color: var(--nord6);
   font-family: monospace;
   flex: 0 0 auto;
+}
+
+.mobile #output {
+  display: none;
+}
+
+.mobile #output-header {
+  display: none;
 }
 
 .p5-friendly {
