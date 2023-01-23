@@ -19,7 +19,9 @@ export function setupToolbar(state, toolbar) {
   function examples(e) {
     fetch(`examples/${e.target.dataset.path}.js`)
       .then((response) => response.text())
-      .then((data) => state.editor.setValue(data));
+      .then((data) => {
+        state.editor.setValue(data);
+      });
   }
 
   function save(e) {

@@ -83,7 +83,11 @@ export async function setupEditor(state, editorRoot) {
 
   let timeoutID = null;
 
-  function handleChange() {
+  function handleChange(e) {
+    if (e.doc.history.lastOrigin === "setValue") {
+      doChanges();
+      return;
+    }
     if (timeoutID) clearTimeout(timeoutID);
     timeoutID = setTimeout(doChanges, state.editorTimeout);
   }
