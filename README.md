@@ -1,12 +1,8 @@
 # playground
 
 This is a little javascript playground meant for quickly iterating on P5.js
-sketches. See it live [here](https://twigg.gg/playground/)!
-
-## running locally
-
-Everything's loaded from a CDN, so you just need to serve `index.html` using a
-tool such as VSCode's Live Server.
+sketches. See it live [here](https://twigg.gg/playground/)! To run locally, you
+just need to serve `index.html` using a tool such as VSCode's Live Server.
 
 ## todo
 
@@ -15,18 +11,21 @@ tool such as VSCode's Live Server.
   - [x] editor full height
   - [x] eval p5 sketch on type
   - [x] intercept p5 friendly errors
-  - [ ] p5 preload
+  - [ ] put eval in other script
+  - [ ] how to attach other p5 listeners?
 - **interface**
   - [x] refactor view into templates
   - [x] resize panels
   - [x] copy sketch code button
   - [x] sketch upload
   - [x] sketch download
+  - [x] example dropdown
+  - [ ] resize observer
   - [ ] show/hide sketch pane
-  - [ ] example dropdown
-    - [ ] open in official p5 sketch editor? gist?
-    - [ ] share - put sketch code in url?
+  - [ ] open in official p5 sketch editor? gist?
+  - [ ] share - put sketch code in url?
   - [ ] stop/pause sketch loop button
+  - [ ] sketch info - framerate, pixel size of window
 - **editor**
   - [x] changes eval sketch
   - [x] save to local storage
@@ -36,6 +35,13 @@ tool such as VSCode's Live Server.
   - [ ] autocomplete with p5 terms
   - [ ] shortcuts e.g. commenting
   - [ ] ctrl-s should save sketch code
+- **mobile**
+  - [x] jank version without output pane
+  - [x] prevent overscroll behavior
+  - [ ] sketch should re-eval when keyboard is opened
+  - [ ] better mobile styling
+  - [ ] add back output pane
+  - [ ] investigate other browsers
 - **output**
   - [x] different output formatting: p5 friendly, error, log
   - [x] same message just increments counter
@@ -43,7 +49,7 @@ tool such as VSCode's Live Server.
   - [ ] scroll with output
   - [ ] should output persist?
 - **bugs**
-  - [ ] iframe resize
+  - [x] iframe resize
   - [ ] fix flash on execute? is this possible, as it needs to remove the
         canvas?
   - [ ] sometimes remove is not defined - I believe this is when `new P5()`
@@ -55,7 +61,6 @@ tool such as VSCode's Live Server.
   - [ ] set sketch timeout interval
   - [ ] select library addons
 - **misc**
-  - [ ] mobile?
   - [ ] sketch templates
     - [ ] minimal - setup and draw
   - [ ] click on p5 function to go to documentation page

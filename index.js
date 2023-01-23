@@ -16,7 +16,19 @@ const globalState = {
   useLocalStorage: false,
   outputBuffer: 100,
   mobile: false,
+  hideSidebar: false,
 };
+
+const examples = [
+  "base",
+  "cones",
+  "discs",
+  "tree",
+  "zoom",
+  "flocking",
+  "arrayObjects",
+  "keyboard",
+];
 
 function evalSketch() {
   if (globalState.resizing) return;
@@ -39,6 +51,13 @@ function evalSketch() {
           ${globalState.sketch};
           try { window.setup = setup } catch (e) { window.parent.postMessage({ type: "error", body: e.toString() }); };
           try { window.draw = draw } catch (e) { window.parent.postMessage({ type: "error", body: e.toString() }); };
+          // try {
+          //   window.windowResized = windowResized ?? null;
+          //   window.keyPressed = keyPressed ?? null;
+          //   window.preload = preload ?? null;
+          //   window.mouseDragged = mouseDragged ?? null;
+          //   window.preload = preload ?? null;
+          // } catch (e) {window.parent.postMessage({ type: "error", body: e.toString() });}
         }
       })()()
 
@@ -73,16 +92,28 @@ function renderOutput(state) {
 
 function view(state) {
   let pointerEvents = state.resizing ? "disablePointerEvents" : "";
-  return html`<div id="workspace">
-    <div id="sidebar-container">
+  return html`<div id="sidebar-container">
       <div id="sidebar">
         <div class="green bar">
           <span class="bar-title">playground</span>
-          <div id="toolbar" class="bar-buttons">
-            <!-- <span data-action="examples">examples</span> -->
-            <span data-action="save">save</span>
-            <span data-action="load">load</span>
-            <span data-action="copy">copy</span>
+          <div id="toolbar">
+            <span id="example-dropdown">
+              examples
+              <div>
+                ${examples.map(
+                  (ex) =>
+                    html`<div
+                      class="toolbar-button droption"
+                      data-action="examples"
+                      data-path=${ex}>
+                      ${ex}
+                    </div>`
+                )}
+              </div>
+            </span>
+            <span class="toolbar-button" data-action="save">save</span>
+            <span class="toolbar-button" data-action="load">load</span>
+            <span class="toolbar-button" data-action="copy">copy</span>
           </div>
         </div>
         <div id="editor" class=${pointerEvents}></div>
@@ -100,8 +131,11 @@ function view(state) {
         data-resizedir="ew"
         class="resize-bar ew"></div>
     </div>
-    <iframe id="sketch" class=${pointerEvents} src="sketch.html"></iframe>
-  </div>`;
+    <iframe
+      allow="camera;microphone"
+      id="sketch"
+      class=${pointerEvents}
+      src="sketch.html"></iframe>`;
 }
 
 function renderLoop() {
@@ -139,6 +173,10 @@ function setup() {
 
   globalState.mobile = isMobile();
   if (globalState.mobile) document.body.classList.add("mobile");
+
+  document
+    .getElementById("sketch")
+    .addEventListener("click", (e) => globalState.sketchWindow.focus());
 
   setupToolbar(globalState, document.getElementById("toolbar"));
   setupEditor(globalState, document.getElementById("editor"));

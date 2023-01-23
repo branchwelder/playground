@@ -1,13 +1,13 @@
 export function setupToolbar(state, toolbar) {
   toolbar.addEventListener("click", (e) => {
-    if (e.target.tagName !== "SPAN") return;
+    if (!e.target.classList.contains("toolbar-button")) return;
     const actions = {
       examples: examples,
       save: save,
       load: load,
       copy: copyToClipboard,
     };
-    actions[e.target.dataset.action]();
+    actions[e.target.dataset.action](e);
   });
 
   const fileInput = document.createElement("input");
@@ -16,11 +16,13 @@ export function setupToolbar(state, toolbar) {
   document.body.appendChild(fileInput);
   fileInput.addEventListener("change", handleUpload);
 
-  function examples() {
-    console.log("examples");
+  function examples(e) {
+    fetch(`examples/${e.target.dataset.path}.js`)
+      .then((response) => response.text())
+      .then((data) => state.editor.setValue(data));
   }
 
-  function save() {
+  function save(e) {
     const blob = new Blob([state.editor.getValue()], {
       type: "text/javascript",
     });
@@ -42,11 +44,11 @@ export function setupToolbar(state, toolbar) {
     reader.readAsText(e.target.files[0]);
   }
 
-  function load() {
+  function load(e) {
     fileInput.click();
   }
 
-  function copyToClipboard() {
+  function copyToClipboard(e) {
     navigator.clipboard.writeText(state.sketch);
   }
 }
