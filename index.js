@@ -29,6 +29,7 @@ const examples = [
   "flocking",
   "arrayObjects",
   "keyboard",
+  "circleTrails",
 ];
 
 function evalSketch() {
