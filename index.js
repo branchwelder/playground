@@ -30,6 +30,7 @@ const examples = [
   "arrayObjects",
   "keyboard",
   "circleTrails",
+  "rainbowCircles",
 ];
 
 function evalSketch() {
