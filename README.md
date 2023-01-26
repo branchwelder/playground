@@ -20,10 +20,8 @@ just need to serve `index.html` using a tool such as VSCode's Live Server.
   - [x] sketch upload
   - [x] sketch download
   - [x] example dropdown
-  - [ ] resize observer
+  - [x] resize observer
   - [ ] show/hide sketch pane
-  - [ ] open in official p5 sketch editor? gist?
-  - [ ] share - put sketch code in url?
   - [ ] stop/pause sketch loop button
   - [ ] sketch info - framerate, pixel size of window
 - **editor**
@@ -64,3 +62,5 @@ just need to serve `index.html` using a tool such as VSCode's Live Server.
   - [ ] sketch templates
     - [ ] minimal - setup and draw
   - [ ] click on p5 function to go to documentation page
+  - [ ] open in official p5 sketch editor? gist?
+  - [ ] share - put sketch code in url?

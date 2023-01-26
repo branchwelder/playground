@@ -37,31 +37,53 @@ function evalSketch() {
   globalState.output = [];
 
   try {
+    //console.log(globalState.sketch);
     globalState.sketchWindow.geval(
       `
-      try { remove() } catch (e) { window.parent.postMessage({ type: "debug", body: "remove() failed"}); }
+      // console.log(p5.prototype)
 
-      (() => {
-        return () => {
+      try { myp5.remove() } catch (e) { window.parent.postMessage({ type: "debug", body: "remove() failed"}); }
+      // console.log(window.setup)
+
+
+
+      function sketch(p) {
+        console.log(p)
           console.log = (function(){
             return function (txt) {
               window.parent.postMessage({ type: "output", body: txt});
             };
           })();
           ${globalState.sketch};
-          try { window.setup = setup } catch (e) { window.parent.postMessage({ type: "error", body: e.toString() }); };
-          try { window.draw = draw } catch (e) { window.parent.postMessage({ type: "error", body: e.toString() }); };
-          // try {
-          //   window.windowResized = windowResized ?? null;
-          //   window.keyPressed = keyPressed ?? null;
-          //   window.preload = preload ?? null;
-          //   window.mouseDragged = mouseDragged ?? null;
-          //   window.preload = preload ?? null;
-          // } catch (e) {window.parent.postMessage({ type: "error", body: e.toString() });}
-        }
-      })()()
+          p.setup = setup;
+          p.draw = draw;
+          // try { window.setup = setup } catch (e) { window.parent.postMessage({ type: "error", body: e.toString() }); };
+          // try { window.draw = draw } catch (e) { window.parent.postMessage({ type: "error", body: e.toString() }); };
+      }
+      let myp5 = new p5(sketch);
 
-      new p5();
+      // new p5();
+
+      // (() => {
+      //   return () => {
+      //     console.log = (function(){
+      //       return function (txt) {
+      //         window.parent.postMessage({ type: "output", body: txt});
+      //       };
+      //     })();
+      //     try { window.setup = setup } catch (e) { window.parent.postMessage({ type: "error", body: e.toString() }); };
+      //     try { window.draw = draw } catch (e) { window.parent.postMessage({ type: "error", body: e.toString() }); };
+      //     // try {
+      //       window.windowResized = windowResized ?? null;
+      //     //   window.keyPressed = keyPressed ?? null;
+      //     //   window.preload = preload ?? null;
+      //     //   window.mouseDragged = mouseDragged ?? null;
+      //     //   window.preload = preload ?? null;
+      //     // } catch (e) {window.parent.postMessage({ type: "error", body: e.toString() });}
+      //   }
+      // })()()
+
+      // new p5();
       `
     );
   } catch (e) {
@@ -164,24 +186,27 @@ function isMobile() {
 
   return check;
 }
+let timeoutID = null;
+const resizeObserver = new ResizeObserver((entries) => {
+  if (timeoutID) clearTimeout(timeoutID);
+  timeoutID = setTimeout(globalState.evalSketch, globalState.editorTimeout);
+});
 
 function setup() {
   render(view(globalState), document.body);
+  let sketchRoot = document.getElementById("sketch");
 
-  globalState.sketchWindow = document.getElementById("sketch").contentWindow;
+  globalState.sketchWindow = sketchRoot.contentWindow;
   globalState.sketchWindow.geval = globalState.sketchWindow.eval;
 
   globalState.mobile = isMobile();
   if (globalState.mobile) document.body.classList.add("mobile");
 
-  document
-    .getElementById("sketch")
-    .addEventListener("click", (e) => globalState.sketchWindow.focus());
-
   setupToolbar(globalState, document.getElementById("toolbar"));
   setupEditor(globalState, document.getElementById("editor"));
   setupResize(globalState, document.getElementById("sidebar-container"));
   setupMessages(globalState);
+  resizeObserver.observe(sketchRoot);
 
   window.requestAnimationFrame(renderLoop);
 }
