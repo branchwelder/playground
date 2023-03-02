@@ -54,6 +54,8 @@ function evalSketch() {
           ${globalState.sketch};
           try { window.setup = setup } catch (e) { window.parent.postMessage({ type: "error", body: e.toString() }); };
           try { window.draw = draw } catch (e) { window.parent.postMessage({ type: "error", body: e.toString() }); };
+          try { window.windowResized = windowResized } catch (e) { console.log("no resize") };
+
           // try {
           //   window.windowResized = windowResized ?? null;
           //   window.keyPressed = keyPressed ?? null;
