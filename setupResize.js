@@ -4,6 +4,8 @@ export function setupResize(state, sidebar) {
   function resizePanel(e) {
     if (!e.target.classList.contains("resize-bar")) return;
 
+    e.preventDefault();
+
     window.getSelection
       ? window.getSelection().removeAllRanges()
       : document.selection.empty();
@@ -17,14 +19,15 @@ export function setupResize(state, sidebar) {
       if (resizeDir === "ns") {
         elToResize.style.height = `${elToResize.offsetHeight - e.movementY}px`;
       } else if (resizeDir === "ew") {
-        elToResize.style.width = `${elToResize.offsetWidth + e.movementX}px`;
+        elToResize.style.width = `${e.clientX}px`;
       }
+    };
+    const stopResize = (e) => {
+      window.removeEventListener("pointermove", moveListener);
+      state.resizing = false;
     };
 
     window.addEventListener("pointermove", moveListener);
-    window.addEventListener("pointerup", (e) => {
-      window.removeEventListener("pointermove", moveListener);
-      state.resizing = false;
-    });
+    window.addEventListener("pointerup", stopResize);
   }
 }

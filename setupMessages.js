@@ -60,7 +60,7 @@ export function setupMessages(state) {
   }
 
   function initSketch() {
-    state.sketchWindow.geval(`"use strict"; new p5();`);
+    state.sketchWindow.geval(`"use strict";`);
     state.evalSketch();
   }
 }

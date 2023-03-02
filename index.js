@@ -74,10 +74,9 @@ function evalSketch() {
   }
 }
 
-function renderOutput() {
-  console.debug("output rendering");
+function renderOutput(state) {
   let out = [];
-  for (const line of globalState.output) {
+  for (const line of state.output) {
     if (line.type === "log") {
       out.push(
         html`<div class="output-line">
@@ -101,13 +100,9 @@ function setOutput(append, line) {
   } else {
     globalState.output = line;
   }
-
-  render(renderOutput(), document.getElementById("output"));
 }
 
 function view(state) {
-  console.debug("view rendering");
-
   let pointerEvents = state.resizing ? "disablePointerEvents" : "";
   return html`<div id="sidebar-container">
       <div id="sidebar">
@@ -141,7 +136,7 @@ function view(state) {
           data-resize="output"
           data-resizedir="ns"
           class="resize-bar ns"></div>
-        <div id="output" class=${pointerEvents}>${renderOutput()}</div>
+        <div id="output" class=${pointerEvents}>${renderOutput(state)}</div>
       </div>
       <div
         data-resize="sidebar"
@@ -152,7 +147,7 @@ function view(state) {
       allow="camera;microphone"
       id="sketch"
       class=${pointerEvents}
-      src="sketch.html"></iframe>`;
+      src="sketch.html"></iframe> `;
 }
 
 function isMobile() {
@@ -173,11 +168,20 @@ function isMobile() {
 }
 
 // TODO resize observer should re-render the view when window is resized
-function windowResize() {
+// function windowResize() {
+//   let vh = window.innerHeight * 0.01;
+//   let vw = window.innerWidth * 0.01;
+//   document.documentElement.style.setProperty("--vh", `${vh}px`);
+//   document.documentElement.style.setProperty("--vw", `${vw}px`);
+// }
+
+function r() {
   let vh = window.innerHeight * 0.01;
   let vw = window.innerWidth * 0.01;
   document.documentElement.style.setProperty("--vh", `${vh}px`);
   document.documentElement.style.setProperty("--vw", `${vw}px`);
+  render(view(globalState), document.body);
+  window.requestAnimationFrame(r);
 }
 
 function setup() {
@@ -197,6 +201,8 @@ function setup() {
   setupEditor(globalState, document.getElementById("editor"));
   setupResize(globalState, document.getElementById("sidebar-container"));
   setupMessages(globalState);
+
+  window.requestAnimationFrame(r);
 }
 
 window.onload = setup;
